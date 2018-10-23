@@ -16,7 +16,7 @@ eureka:
 ---
 
 spring:
-  port: 8201
+  port: 8202
   profiles: test #开发环境
   application:
     name:  microservicecloud-config-client
