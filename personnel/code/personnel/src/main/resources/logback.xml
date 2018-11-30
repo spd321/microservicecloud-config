@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration debug="true" scan="true">
+ <!--日志格式应用spring boot默认的格式，也可以自己更改-->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+	<!-- 应用名称 -->
+	<property name="APP_NAME" value="personnel" />
+	<!--定义日志存放的位置，默认存放在项目启动的相对路径的目录-->
+	 <property name="LOG_PATH" value="logs"/>
+	 <property name="LOG_FILE" value="personnel.log" />
+	
+	
+	<!-- 输出格式 -->
+	<property name="ENCODER_PATTERN"
+		value="%d{yyyy-MM-dd HH:mm:ss.SSS}---666--- [%thread] %-5level %logger{80} - %msg%n" />
+	<contextName>${APP_NAME}</contextName>
+
+	<!-- 控制台日志：输出全部日志到控制台 -->
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>${ENCODER_PATTERN}</Pattern>
+		</encoder>
+	</appender>
+
+	<!-- 文件日志：输出全部日志到文件 -->
+	<appender name="FILE_ALL"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_PATH}/%d{yyyy-MM-dd}/${LOG_FILE}_all.%d{yyyy-MM-dd}.log
+			</fileNamePattern>
+			<maxHistory>7</maxHistory>
+		</rollingPolicy>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>${ENCODER_PATTERN}</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>debug</level>
+		</filter>
+	</appender>
+
+	<!-- 错误日志：用于将错误日志输出到独立文件 -->
+	<appender name="FILE_ERROR"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_PATH}/%d{yyyy-MM-dd}/${LOG_FILE}_error.%d{yyyy-MM-dd}.log
+			</fileNamePattern>
+		</rollingPolicy>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>${ENCODER_PATTERN}</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>WARN</level>
+		</filter>
+	</appender>
+
+	<!-- 日志输出级别 -->
+	<!--记录到文件时，记录两类一类是error日志，一个是所有日志 -->
+	<root level="INFO">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE_ALL" />
+		<appender-ref ref="FILE_ERROR" />
+	</root>
+
+
+
+</configuration>
